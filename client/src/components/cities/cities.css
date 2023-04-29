@@ -1,0 +1,48 @@
+
+.cities{
+  width: 100%;
+  max-width: 1024px;
+  display: flex;
+  gap:20px;
+  z-index: 1;
+}
+
+.cityItem{
+  position: relative;
+  color: white;
+  border-radius: 10px;
+  /* the image is overflowing so we gonna hide the overflow */
+  overflow: hidden;
+  height: 300px;
+  cursor: pointer;
+}
+
+.cityImg{
+  width: 100%;
+  height: 100%;
+  /* object-fit: fill; */
+  /* The object-fit CSS property is used to specify how an or should be resized to fit its container(zommed in /out , stretched ,eg) */
+} 
+
+.cityInfo{
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  background-color: rgba(0,0,0,0.4);
+  font-weight: bold;
+  padding-left: 20px;
+}
+
+.cityTitle {
+  position: absolute;
+  bottom: 40px;
+  display: flex; 
+  gap: 10px;
+  align-items: center;
+}
+
+.cityInfo h2{
+  position: absolute;
+  bottom: 10px;
+}

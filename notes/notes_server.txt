@@ -1,0 +1,42 @@
+1/
+  *npm init -y : it will initialize our node app by creating package.json file
+  *install express framework ,and import it in index.js(npm i express)
+  *add "type":"module" to use es6 modules such as import export to avoid node js import structure like  => const express = require ("express")
+  * the "start" : "node index.js" allows us to use npm start commmand which launch the app basing on the index.js file but the server is not reloading automatically , so we use the nodemon package ("start" : "nodemon index.js")
+
+2/ Connection to mongo db
+  *the mongodb connection string will be hidden in a .env file and to accessed in index.js with the dotenv library (npm i dotenv)
+  *using the mongoose library the connection between mongodb and our app will be easier
+  *the connect function returns a promise so it should be declared in an async function  
+  *the async db connection function should be called in the callback function of http server
+  
+3/creating our first api
+  *the auth router is not included in the user because we gonna use cookies , jwt ,etc 
+  *each api request is linked to an api endpoint which responds when the route(URI=path) is matched
+  *creating the endpoints(uris(links) + http methods) for each route 
+  *creating the models (to handle db data) using Schema(mongoose) module => a hierarchy for each db table
+  *the model file name and type of model properties should be uppercase(first letter)
+  *the middleware function are important in our apps , they are responsible of : intercepting any incoming or upcoming(before we send it to the client) data . An Express application is essentially a series of middleware function calls.
+  *create an error handling middleware to customize errors
+
+4/Creating Controller files & setting authentification feature:
+  *the handler functions logic will be written in controller files and exported in order to use
+  *the bcryptjs is a famous library used to hash password for security reasons
+  
+5/ use of jsonwebtoken lib with cookies:
+  *the chosen data(user for example) object will be encapsulated in a jwt(used to check the user is admin or not for example to set authorizations for each type of user) and sent as a cookie(lib cookie-parser =>Parse Cookie header and populate req.cookies with an object keyed by the cookie name.) with the res object , in next operations(like deleting hotels) :
+    1/the jwt will be verified (cookie accessed via the req object)
+    2/checking user info encapsulated in jwt
+    3/delete hotels
+
+6/JWT Role-based Authorization Verification:
+ a-token verification using verifyToken
+ b1-check user identity using token data(the owner of the account or admin can delete the account as example)
+ b2-check the user isAdmin or not
+ *set JWT verification middleware functions for endpoints
+
+7/Set Model Relations:
+8/install the React app
+9/get count of documents:
+  query vs params :Both are closely related but they are not the same at all, params are parameters set for the route, query are values resembling variable assignment that provide extra information on what is being required for the route and it will always start with a ? on the URL, inherently they are both string values that express extrapolates into objects and key/value pairs from the req object.
+  * the error returned by the handler function of the endpoint (getcount) is because almost all the get endpoint paths begin by a parameter and here this get endpoint begin by a string(getcount) , to solve this problem ,we should add a significant strings to each of these endpoint paths 

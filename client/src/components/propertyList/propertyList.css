@@ -1,0 +1,32 @@
+.pList{
+  width: 100%;
+  max-width: 1024px;
+  display: flex;
+  gap: 20px;
+}
+.pListItem{
+  flex: 1;
+  /* property flex is used here to make equality between flex elements , it has three values 
+  only the first is needed here (flex-grow)*/
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.pListImg{
+  width: 100%;
+  height: 150px;
+  object-fit: fill;
+}
+
+.pListTitles>h1{
+  text-transform: capitalize;
+  font-size: 18px;
+}
+
+.pListTitles>h2{
+  font-size: 14px;
+  /* Font weight is the “value” placed on your font that will determine how bold or light your text will appear. */
+  font-weight: 300;
+  
+}

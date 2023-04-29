@@ -1,0 +1,5 @@
+ctrl+shift+p: command pallette 
+ctrl+p: quick file search
+ctrl+r : relaod window(command palette more useful)
+alt+0169: copyright symbol 
+ALT+0153:trademark symbol

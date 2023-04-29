@@ -1,0 +1,34 @@
+.navbar {
+  height: 60px;
+  background-color: #003580;
+  display: flex;
+  justify-content: center; /* it centers horizontally */
+}
+
+/* this container is used for diffrent height screens */
+.navContainer {
+  width: 100%;
+  max-width: 1024px;
+  color: white;
+  display: flex;
+  align-items: center; /* it centers vertically */
+  justify-content: space-between;
+  padding-top: 20px;
+
+}
+
+.logo {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.navButton {
+  width: 83px;
+  height: 36px;
+  font-weight: bold;
+  margin-left: 20px;
+  padding: 5px 10px;
+  cursor: pointer;
+  color: #0071c2;
+  border: 1px solid #0071c2;
+}

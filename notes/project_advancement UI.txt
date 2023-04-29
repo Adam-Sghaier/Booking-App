@@ -1,0 +1,23 @@
+1/creating routes:
+- to manage routes we use the react-router-dom dependency
+- rafce (shortcut to create a react arrow function export component)
+2/creating reusable components & home UI:
+-the folder components serve to create reusable components such as navbar 
+->home design:
+* font-weight => sets the weight (or boldness) of the font
+* we gonna use the font awesome package to add icons to our project 
+* for calnedar , we gonna use the react-date-range package
+* to transform the date datatype to readable strings we use the function format of date-fns package
+* !==(not equal to) ===(is equal to)
+*The major difference between margin & gap is that gap applies the children of the element, so it can "see" every element and apply the spacing equally. Margin applies to the element itself, so it can't "see" anyone else.
+*The major functional difference is with gap you can specify equal spacing between flex elements,If you're using margin you can approximate the same behavior, but you have to add a negative margin to the parent
+*name conventions:
+  ->folder (camel case) & css file first letter in lowercase
+  ->jsx file (camel case) first letter in each new word
+3/Search result page design
+  -we gonna handle the onclick event for home search button to show chosen data on hotels search bar page using the react router dom navigate function and using the useLocation.state to retreive the state result 
+4/fetch api data using hooks:
+  -install axios library to fetch data 
+  -create useFetch component(hook) to fetch data
+  -declaring the useFetch hook in our cities component(adding a proxy parameter to package.json to define our main url to avoid writing the full url as parameter in the hook(use the endpoint path only) or using the cors middleware in the api)
+  -finally,using the data array to display its content

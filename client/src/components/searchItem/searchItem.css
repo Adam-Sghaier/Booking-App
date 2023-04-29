@@ -1,0 +1,109 @@
+.sItem {
+  padding: 15px;
+  display: flex;
+  gap: 18px;
+  border: 1px solid lightgrey;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}
+
+.siImg {
+  width: 200px;
+  height: 200px;
+  border-radius: 5px;
+}
+
+.sDesc {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 13px;
+}
+
+.sTitle {
+  font-size: 18px;
+  color: #0071c2;
+  margin: 0;
+}
+
+.siDistance,.siFeatures{
+  font-size: 12px;
+}
+
+.specialFeatures {
+  color: white;
+  background-color: green;
+  width: max-content;
+  padding: 3px;
+  border-radius: 4px;
+}
+
+.siSubtitle {
+  font-weight: 700;
+}
+
+.siCancelOp {
+  font-weight: 700;
+  color: green;
+}
+.siCancelOpSubtitle {
+  color: green;
+}
+
+.sDetails{
+  flex:1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.sRating{
+  display: flex;
+  justify-content: space-between;
+}
+
+.srTitle{
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.srBtn{
+  background-color: #003580;
+  color: white;
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px 8px 8px 0;
+  font-weight: bold;
+}
+
+.sPriceDetails{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.sPrice{
+  margin-left: auto;
+  font-size: 24px;
+  font-weight: bold;
+  float: left;
+}
+
+.sPriceSubtitle{
+  margin-left: auto;
+  font-size: 12px;
+  color: gray;
+}
+
+.siAvButton{
+  width: 100%;
+  color: white;
+  background-color: #0071c2;
+  border: none;
+  height: 40px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+}
