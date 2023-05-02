@@ -2,12 +2,12 @@ import Joi from "joi";
 import passwordComplexity from "joi-password-complexity";
 
 //create validator schema 
-export const registerValidator = (data) => {
+
+export const createUserValidator = (data) => {
   const schema = Joi.object({
     username: Joi.string().min(6).max(30).label("Username").required(),
     email: Joi.string().email().label("Email").required(),
     country: Joi.string().min(4).label("Country").required(),
-    img: Joi.string().label("Image").required(),
     city: Joi.string().min(4).label("City").required(),
     phone: Joi.string().regex(/^[0-9]{8}$/).message("Invalid Phone Number").label("Phone Number").required(),
     password: passwordComplexity().label("Password").required()

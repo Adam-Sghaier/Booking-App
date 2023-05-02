@@ -2,7 +2,7 @@ import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import List from "./pages/list/List";
 import UpdateUser from "./pages/updateUser/UpdateUser";
-import NewUser from "./pages/new/NewUser";
+import NewUser from "./pages/newUser/NewUser";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { hotelInputs, roomInputs, userInputs } from "./formSource";
 import "./style/dark.scss";
@@ -41,8 +41,11 @@ function App() {
       try {
         await axios.get("/users/admin");
       } catch (error) {
-        removeCookie('access_token');
-        dispatch({ type: "LOGOUT" });
+        if (error.response.status === 404) {
+          removeCookie('access_token');
+          dispatch({ type: "LOGOUT" });
+        }
+
 
       }
     };
@@ -58,11 +61,11 @@ function App() {
         <Routes>
           <Route path="/">
             <Route path="login">
-              <Route index element ={<Login />} />
-              <Route path="forgot_password" element ={<ForgotPass />} />
-              <Route path="password_reset/:id/:token" element ={<PasswordReset />} />
-              </Route>
-            <Route 
+              <Route index element={<Login />} />
+              <Route path="forgot_password" element={<ForgotPass />} />
+              <Route path="password_reset/:id/:token" element={<PasswordReset />} />
+            </Route>
+            <Route
               index
               element={
                 <ProtectedRoute>
@@ -82,7 +85,7 @@ function App() {
               />
               <Route
                 path=":userId"
-                element={ 
+                element={
                   <ProtectedRoute>
                     <UpdateUser inputs={userInputs} />
                   </ProtectedRoute>

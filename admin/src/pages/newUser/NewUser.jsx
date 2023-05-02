@@ -11,12 +11,12 @@ import { AuthContext } from "../../context/AuthContext";
 
 const NewUser = ({ inputs, title }) => {
   const [file, setFile] = useState("");
-  const [info, setInfo] = useState({}); 
+  const [info, setInfo] = useState({});
   const [passwordType, setPasswordType] = useState("password");
   const [error, setError] = useState("");
   const [isErrorAlertVisible, setIsErrorAlertVisible] = useState(false);
-  const [isDeleteAlertVisible, setIsDeleteAlertVisible] = useState(false);
-  const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false);
+  const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(true);
+  const [addState, setAddState] = useState("no_image");
   const [message, setMessage] = useState("");
   const { loading, dispatch } = useContext(AuthContext);
   const handleChange = (e) => {
@@ -31,39 +31,53 @@ const NewUser = ({ inputs, title }) => {
   };
   const handleClick = async (e) => {
     e.preventDefault();
-    let id;
     let formData = new FormData();
     formData.append("file", file);
     dispatch({ type: "LOGIN_START" });
     try {
-      const { data } = await axios.post("/auth/uploadtogoogledrive", formData);
-      const url = `https://drive.google.com/uc?export=view&id=${data.response.data.id}`;
-      id = data.response.data.id;
+      if (file.length === 0) {
+        setAddState("no_image");
+        setMessage("Image required");
+        setIsErrorAlertVisible(true);
+        setTimeout(() => {
+          setIsErrorAlertVisible(false);
+        }, 1500);
+      }
 
-      const newUser = { ...info, img: url };
+      const res = await axios.post("/auth/register", { ...info });
 
-      const res = await axios.post("/auth/register", newUser);
-      setMessage(res.data.admin);
+      if (res) {
+        const { data } = await axios.post(
+          "/auth/uploadtogoogledrive",
+          formData
+        );
+        const id = data.response.data.id;
+        const url = `https://drive.google.com/uc?export=view&id=${id}`;
+        setAddState("image_uploaded");
+        setIsSuccessAlertVisible(true);
+        setTimeout(() => {
+          setIsSuccessAlertVisible(false);
+        }, 3000);
+        await axios.post("/auth/register", { img: url, email: info.email });
+      }
+
       dispatch({ type: "LOGIN_FAILURE" });
+      setAddState("is_updated");
+      setMessage(res.data.admin);
       setIsSuccessAlertVisible(true);
       setTimeout(() => {
         setIsSuccessAlertVisible(false);
       }, 3000);
     } catch (error) {
-      dispatch({ type: "LOGIN_FAILURE" });
-      if (id) {
-        const { data } = await axios.delete(`/auth/delete/${id}`);
-        setMessage(data);
-        setIsDeleteAlertVisible(true);
-        setTimeout(() => {
-          setIsDeleteAlertVisible(false);
-        }, 2500);
-      }
-      setError(error.response.data.message);
-      setIsErrorAlertVisible(true);
       setTimeout(() => {
-        setIsErrorAlertVisible(false);
-      }, 5000);
+        dispatch({ type: "LOGIN_FAILURE" });
+        setError(error.response.data.message);
+        setAddState("error_validation");
+        setIsErrorAlertVisible(true);
+        setTimeout(() => {
+          setIsErrorAlertVisible(false);
+        }, 2000);
+      }, 2000);
     }
   };
   return (
@@ -84,8 +98,11 @@ const NewUser = ({ inputs, title }) => {
               }
               alt=""
             />
-            {isDeleteAlertVisible && (
-              <div className="delete_msg">{message}</div>
+            {addState === "image_uploaded" && isSuccessAlertVisible && (
+              <div className="success_msg">{message}</div>
+            )}
+            {addState === "no_image" && isErrorAlertVisible && (
+              <div className="error_msg">{message}</div>
             )}
           </div>
           <div className="right">
@@ -130,8 +147,10 @@ const NewUser = ({ inputs, title }) => {
                   )}
                 </div>
               ))}
-              {isErrorAlertVisible && <div className="error_msg">{error}</div>}
-              {isSuccessAlertVisible && (
+              {addState === "error_validation" && isErrorAlertVisible && (
+                <div className="error_msg">{error}</div>
+              )}
+              {addState === "is_updated" && isSuccessAlertVisible && (
                 <div className="success_msg">{message}</div>
               )}
               <button onClick={handleClick} disabled={loading}>

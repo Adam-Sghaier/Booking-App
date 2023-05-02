@@ -18,12 +18,12 @@ const app = express();
 // returns a process.env file containing the keys and their values defined in .env file
 dotenv.config();
 
-const connect = async () => {
+const connect = async () => { 
   try {
     await mongoose.connect(process.env.MONGO);
     console.log("connected to mongoDB");
   } catch (error) {
-    throw error;
+    throw error; 
   }
 };
 

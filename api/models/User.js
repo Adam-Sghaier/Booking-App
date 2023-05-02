@@ -19,7 +19,6 @@ const UserSchema = new Schema(
     },
     img : {
       type:String,
-      required :true
     },
     city: {
       type: String,

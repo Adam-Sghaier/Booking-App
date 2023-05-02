@@ -97,7 +97,14 @@ export const setPassword = async (req, res) => {
 
     if (!user.verified) {
 
-      const url = `${process.env.BASE_URL}users/verify/${user._id}/${token.token}`;
+      let url;
+      if (Number(req.rawHeaders[5]) === 3000) {
+        url = `${process.env.BASE_URL_C}${route}`;
+      }
+      else {
+        url = `${process.env.BASE_URL_A}${route}`;
+      }
+      
       await sendVerification(user.email, "Booking.tn Password Reset", `<div><h1>Reset Password Email</h1>
         <h2>Hello</h2>
         <p>To reset your password , click the link below </p>
