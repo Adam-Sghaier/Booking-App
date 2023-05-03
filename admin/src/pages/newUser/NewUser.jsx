@@ -13,10 +13,8 @@ const NewUser = ({ inputs, title }) => {
   const [file, setFile] = useState("");
   const [info, setInfo] = useState({});
   const [passwordType, setPasswordType] = useState("password");
-  const [error, setError] = useState("");
-  const [isErrorAlertVisible, setIsErrorAlertVisible] = useState(false);
-  const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(true);
-  const [addState, setAddState] = useState("no_image");
+  const [isAlertVisible, setIsAlertVisible] = useState(true);
+  const [addState, setAddState] = useState("");
   const [message, setMessage] = useState("");
   const { loading, dispatch } = useContext(AuthContext);
   const handleChange = (e) => {
@@ -36,11 +34,11 @@ const NewUser = ({ inputs, title }) => {
     dispatch({ type: "LOGIN_START" });
     try {
       if (file.length === 0) {
-        setAddState("no_image");
         setMessage("Image required");
-        setIsErrorAlertVisible(true);
+        setAddState("Image required");
+        setIsAlertVisible(true);
         setTimeout(() => {
-          setIsErrorAlertVisible(false);
+          setIsAlertVisible(false);
         }, 1500);
       }
 
@@ -53,31 +51,31 @@ const NewUser = ({ inputs, title }) => {
         );
         const id = data.response.data.id;
         const url = `https://drive.google.com/uc?export=view&id=${id}`;
+        setMessage("Image Uploaded");
         setAddState("image_uploaded");
-        setIsSuccessAlertVisible(true);
+        setIsAlertVisible(true);
         setTimeout(() => {
-          setIsSuccessAlertVisible(false);
+          setIsAlertVisible(false);
         }, 3000);
-        await axios.post("/auth/register", { img: url, email: info.email });
+        await axios.put(`/users/${res.data.id}`, { img: url });
+        dispatch({ type: "LOGIN_FAILURE" });
+        setAddState("user_added");
+        setMessage(res.data.admin);
+        setIsAlertVisible(true);
+        setTimeout(() => {
+          setIsAlertVisible(false);
+        }, 3000);
       }
-
-      dispatch({ type: "LOGIN_FAILURE" });
-      setAddState("is_updated");
-      setMessage(res.data.admin);
-      setIsSuccessAlertVisible(true);
-      setTimeout(() => {
-        setIsSuccessAlertVisible(false);
-      }, 3000);
     } catch (error) {
       setTimeout(() => {
         dispatch({ type: "LOGIN_FAILURE" });
-        setError(error.response.data.message);
         setAddState("error_validation");
-        setIsErrorAlertVisible(true);
+        setMessage(error.response.data.message);
+        setIsAlertVisible(true);
         setTimeout(() => {
-          setIsErrorAlertVisible(false);
+          setIsAlertVisible(false);
         }, 2000);
-      }, 2000);
+      }, 1600);
     }
   };
   return (
@@ -98,10 +96,10 @@ const NewUser = ({ inputs, title }) => {
               }
               alt=""
             />
-            {addState === "image_uploaded" && isSuccessAlertVisible && (
+            {addState === "image_uploaded" && isAlertVisible && (
               <div className="success_msg">{message}</div>
             )}
-            {addState === "no_image" && isErrorAlertVisible && (
+            {addState === "Image required" && isAlertVisible && (
               <div className="error_msg">{message}</div>
             )}
           </div>
@@ -147,10 +145,10 @@ const NewUser = ({ inputs, title }) => {
                   )}
                 </div>
               ))}
-              {addState === "error_validation" && isErrorAlertVisible && (
-                <div className="error_msg">{error}</div>
+              {addState === "error_validation" &&isAlertVisible && (
+                <div className="error_msg">{message}</div>
               )}
-              {addState === "is_updated" && isSuccessAlertVisible && (
+              {addState === "user_added" && isAlertVisible && (
                 <div className="success_msg">{message}</div>
               )}
               <button onClick={handleClick} disabled={loading}>

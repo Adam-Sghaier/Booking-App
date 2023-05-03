@@ -6,7 +6,7 @@ export const authenticateGoogle = () => {
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);
   const auth = new google.auth.GoogleAuth({
-    keyFile: `${__dirname}/../upload-images-service.json`,
+    keyFile: `${__dirname}/../../../secure/upload-images-service.json`,
     scopes: "https://www.googleapis.com/auth/drive",
   });
   return auth;

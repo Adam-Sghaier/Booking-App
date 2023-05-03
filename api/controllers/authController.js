@@ -15,57 +15,52 @@ import {
 
 export const register = async (req, res, next) => {
   try {
-    if (!req.body.img) {
-      const { error } = createUserValidator(req.body);
-      if (error)
-        return res.status(400).send({ message: error.details[0].message });
-      const salt = bcrypt.genSaltSync(10);
-      const hash = bcrypt.hashSync(req.body.password, salt);
-      const newUser = new User({
-        ...req.body,
-        password: hash,
-      });
 
-      let user = await User.findOne({ username: newUser.username });
+    const { error } = createUserValidator(req.body);
+    if (error)
+      return res.status(400).send({ message: error.details[0].message });
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(req.body.password, salt);
+    const newUser = new User({
+      ...req.body,
+      password: hash,
+    });
 
-      if (user && user.email === newUser.email) {
-        return next(createError(404, "Username & Email Exists!"));
-      } else if (user) {
-        return next(createError(404, "Username Exists!"));
-      } else {
-        user = await User.findOne({ email: newUser.email });
-        if (user) return next(createError(404, "Email Exists!"));
-      }
-      user = await newUser.save();
+    let user = await User.findOne({ username: newUser.username });
+
+    if (user && user.email === newUser.email) {
+      return next(createError(404, "Username & Email Exists!"));
+    } else if (user) {
+      return next(createError(404, "Username Exists!"));
     } else {
-      const user = User.findOne({email :req.params.email});
-      // create token that we gonna verify it later
-      const token = await new Token({
-        userId: user._id,
-        token: crypto.randomBytes(32).toString("hex"),
-      }).save();
-      // creating the url that we gonna verify it
-      // const url = `${process.env.BASE_URL}users/verify/${user.verificationCode}`;
-      const url = `${process.env.BASE_URL_C}users/verify/${user.id}/${token.token}`;
-      await sendVerification(
-        user.email,
-        "Booking.tn Verify Email",
-        `<div><h1>Confirmation Email</h1>
+      user = await User.findOne({ email: newUser.email });
+      if (user) return next(createError(404, "Email Exists!"));
+    }
+    user = await newUser.save();
+
+
+    // create token that we gonna verify it later
+    const token = await new Token({
+      userId: user._id,
+      token: crypto.randomBytes(32).toString("hex"),
+    }).save();
+    // creating the url that we gonna verify it
+    // const url = `${process.env.BASE_URL}users/verify/${user.verificationCode}`;
+    const url = `${process.env.BASE_URL_C}users/verify/${user.id}/${token.token}`;
+    await sendVerification(
+      user.email,
+      "Booking.tn Verify Email",
+      `<div><h1>Confirmation Email</h1>
     <h2>Hello</h2>
     <p>To activate your account , click the link below </p>
     <a href=${url}>Click Here</a>
     </div>`
-      );
-    }
+    );
 
-
-
-
-
-    // or await new User({...req.body,password:hash}).save()
     return res.status(200).json({
       user: "An Email sent to your account please verify",
       admin: "An Email sent to user account in order to confirm",
+      id:user._id
     });
   } catch (error) {
     next(error);

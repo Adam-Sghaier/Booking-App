@@ -46,7 +46,6 @@ function App() {
           dispatch({ type: "LOGOUT" });
         }
 
-
       }
     };
 
