@@ -33,18 +33,8 @@ const NewUser = ({ inputs, title }) => {
     formData.append("file", file);
     dispatch({ type: "LOGIN_START" });
     try {
-      if (file.length === 0) {
-        setMessage("Image required");
-        setAddState("Image required");
-        setIsAlertVisible(true);
-        setTimeout(() => {
-          setIsAlertVisible(false);
-        }, 1500);
-      }
-
-      const res = await axios.post("/auth/register", { ...info });
-
-      if (res) {
+      if (file) {
+        const res = await axios.post("/auth/register", { ...info });
         const { data } = await axios.post(
           "/auth/uploadtogoogledrive",
           formData
@@ -56,15 +46,25 @@ const NewUser = ({ inputs, title }) => {
         setIsAlertVisible(true);
         setTimeout(() => {
           setIsAlertVisible(false);
-        }, 3000);
+        }, 1500);
         await axios.put(`/users/${res.data.id}`, { img: url });
+        setTimeout(() => {
+          dispatch({ type: "LOGIN_FAILURE" });
+          setAddState("user_added");
+          setMessage(res.data.admin);
+          setIsAlertVisible(true);
+          setTimeout(() => {
+            setIsAlertVisible(false);
+          }, 2000);
+        }, 1500);
+      } else {
         dispatch({ type: "LOGIN_FAILURE" });
-        setAddState("user_added");
-        setMessage(res.data.admin);
+        setAddState("no_image");
+        setMessage("Image Required");
         setIsAlertVisible(true);
         setTimeout(() => {
           setIsAlertVisible(false);
-        }, 3000);
+        }, 1500);
       }
     } catch (error) {
       setTimeout(() => {
@@ -75,7 +75,7 @@ const NewUser = ({ inputs, title }) => {
         setTimeout(() => {
           setIsAlertVisible(false);
         }, 2000);
-      }, 1600);
+      }, 1500);
     }
   };
   return (
@@ -99,7 +99,7 @@ const NewUser = ({ inputs, title }) => {
             {addState === "image_uploaded" && isAlertVisible && (
               <div className="success_msg">{message}</div>
             )}
-            {addState === "Image required" && isAlertVisible && (
+            {addState === "no_image" && isAlertVisible && (
               <div className="error_msg">{message}</div>
             )}
           </div>
@@ -145,7 +145,7 @@ const NewUser = ({ inputs, title }) => {
                   )}
                 </div>
               ))}
-              {addState === "error_validation" &&isAlertVisible && (
+              {addState === "error_validation" && isAlertVisible && (
                 <div className="error_msg">{message}</div>
               )}
               {addState === "user_added" && isAlertVisible && (
